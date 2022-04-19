@@ -1,27 +1,29 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class Gamemanager : MonoBehaviour
 {
-    public Canvas GameOverCanvas;
-    public Text FinalScore;
+    private static Gamemanager Instance;
+    public UIManager UIinstance;
 
-    void Start()
+    private void Awake() {
+        Instance=this;
+    }
+    public void Start()
     {
-        GameOverCanvas.gameObject.SetActive(false);
+        UIinstance.GameCanvasActive();
         Time.timeScale=1;
     }
 
-    void Update()
+    public void Update()
     {
-        FinalScore.text = EnemyCollider.score.ToString();
+        Instance.ManagerCall();
     }
     public void GameOver()
     {
-        GameOverCanvas.gameObject.SetActive(true);
+        UIinstance.GameCanvasActive();
         Time.timeScale=0;
     }
 
@@ -37,14 +39,21 @@ public class Gamemanager : MonoBehaviour
 
     public void Replay()
     {
+        EnemyCollider.score=0;
         SceneManager.LoadScene(1);
         Time.timeScale=1;
     }
 
     public void MainMenu()
     {
+        EnemyCollider.score=0;
         SceneManager.LoadScene(0);
         Time.timeScale=1;
+    }
+
+    private void ManagerCall()
+    {
+        UIinstance.FinalScoreText();
     }
 
 }
